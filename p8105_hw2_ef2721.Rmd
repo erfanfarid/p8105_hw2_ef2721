@@ -15,6 +15,7 @@ library(readxl)
 
 
 ## Problem 1
+
 Below we import and clean data from `NYC_Transit_Subway_Entrance_And_Exit_Data.csv`. First data is imported, then the `Route` column names that are not `dbl` are turned into `chr`. We then use janitor function, select the noted columns, and change `entry` from `yes` / `no` to a logical variable. 
 
 ```{r}
@@ -90,13 +91,21 @@ trans_df %>%
 ```
 
 There are 17 distinct stations which serve the A line and are ADA compliant.
-<<<<<<< HEAD
-
 
 ## Problem 2
 
+The `readxl` library has been introduced earlier in the code. In this problem, we first read the data, narrowing to the sheet desired. To avoid unnecessary images, the data were selected to the numerical table. We then use the `janitor` function to clean the data, and selected dumpster-specific data. Using the `filter` function, the rows with summary values were removed. Lastly, the `as.integer` function was used to round sports_balls values to the nearest round number. Below, is the code chunk implementing above:
+
 ```{r}
 trash_df=
-  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx") %>% 
-  janitor::clean_names()
+  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx", 
+      sheet = "Mr. Trash Wheel", 
+      range = "A2:N535") %>% 
+  janitor::clean_names() %>% 
+  select(-homes_powered) %>% 
+  drop_na %>% 
+  mutate(
+    sports_balls = as.integer(sports_balls)
+  )
 ```
+
