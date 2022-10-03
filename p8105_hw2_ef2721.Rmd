@@ -106,10 +106,13 @@ trash_df =
   drop_na %>% 
   mutate(
     sports_balls = as.integer(sports_balls)
-  )
+  ) %>% 
+  mutate(
+    trash_source = "mr_trash_wheel",
+    .before = dumpster)
 ```
 
-We will now use a similar approach to import and clean the data from "Professor Trash Wheel". Please see the code chunk below:
+Of note, add the end of the code-chunk above, the `mutate` function was used to add a column at the beginning of the dataframe to distinguish source of data. We will now use a similar approach to import and clean the data from "Professor Trash Wheel". Please see the code-chunk below:
 
 ```{r}
 protrash_df = 
@@ -121,6 +124,9 @@ protrash_df =
   drop_na %>% 
   mutate(
     sports_balls = as.integer(sports_balls)
-  )
+  ) %>% 
+  mutate(
+    trash_source = "prof_trash_wheel",
+    .before = dumpster)
 ```
 
