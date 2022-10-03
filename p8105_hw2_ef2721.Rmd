@@ -97,10 +97,25 @@ There are 17 distinct stations which serve the A line and are ADA compliant.
 The `readxl` library has been introduced earlier in the code. In this problem, we first read the data, narrowing to the sheet desired. To avoid unnecessary images, the data were selected to the numerical table. We then use the `janitor` function to clean the data, and selected dumpster-specific data. Using the `filter` function, the rows with summary values were removed. Lastly, the `as.integer` function was used to round sports_balls values to the nearest round number. Below, is the code chunk implementing above:
 
 ```{r}
-trash_df=
+trash_df =
   read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx", 
       sheet = "Mr. Trash Wheel", 
       range = "A2:N535") %>% 
+  janitor::clean_names() %>% 
+  select(-homes_powered) %>% 
+  drop_na %>% 
+  mutate(
+    sports_balls = as.integer(sports_balls)
+  )
+```
+
+We will now use a similar approach to import and clean the data from "Professor Trash Wheel". Please see the code chunk below:
+
+```{r}
+protrash_df = 
+  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",
+      sheet = "Professor Trash Wheel",
+      range = "A2:N117")%>% 
   janitor::clean_names() %>% 
   select(-homes_powered) %>% 
   drop_na %>% 
