@@ -152,6 +152,7 @@ The result of the code chinks above is a dataframe called "alltrash_df", which w
 
 ## Problem 3
 
+### Part 1
 In the code chunk below, we imported the _pols-month_ dataset into the `pol_df` dataframe. We then cleaned it up using `janitor`, then split the dates into their year, month, and day components using `separate()` argument, splitting by _"-"_. The month number was then converted to written using `month.name` function. Afterward, the president column was created with `mutate()` utilizing the `prez_gop` and `prez_dem` columns. The `if_else` function was used to define values of the two available conditions, using `gop` and `dem` values, respectively. Lastly, the `prez_gop`, `prez_dem`, and `day` columns were removed using the `select()` function.
 
 ```{r}
@@ -170,3 +171,22 @@ pol_df =
 ```
 
 
+### Part 2
+Next, in the following code chunk, we imported and cleaned the `snp.csv` file using the `read_csv` and `janitor::clean_names()` functions. we then separated the date into 3 columns. The order here, however, was different than the previous chunk. So, we followed an _MDY_ model. In order to change the dates from 2-digits into 4 digits, an additional conditional variable was created, and `mutate()` function was used to differentiate centuries based on relation to current year, _`22_. The columns were then sorted by year and month using `arrange()` function. For consistency, month was changed from numerical to written description. Lastly, using  `select()`, the intermediate variables and date columns. were removed.
+
+```{r}
+snp_df =
+  read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(
+    date, 
+    into = c("month", "date", "dig_2_year"), 
+    sep = "/", 
+    convert = TRUE) %>% 
+  mutate(alter = if_else(dig_2_year < 22, "2000", "1900")) %>% 
+  mutate(alter = as.integer(alter)) %>% 
+  mutate(year = alter + dig_2_year, .before = month) %>% 
+  arrange(year, month) %>% 
+  mutate(month = month.name[month]) %>% 
+  select(-dig_2_year, -alter, -date)
+```
