@@ -94,13 +94,17 @@ There are 17 distinct stations which serve the A line and are ADA compliant.
 
 ## Problem 2
 
-The `readxl` library has been introduced earlier in the code. In this problem, we first read the data, narrowing to the sheet desired. To avoid unnecessary images, the data were selected to the numerical table. We then use the `janitor` function to clean the data, and selected dumpster-specific data. Using the `filter` function, the rows with summary values were removed. Lastly, the `as.integer` function was used to round sports_balls values to the nearest round number. Below, is the code chunk implementing above:
+The `readxl` library has been introduced earlier in the code. In this problem, we first read the data, narrowing to the sheet desired. To avoid unnecessary images, the data were selected to the numerical table. 
+
+We then use the `janitor` function to clean the data, and selected dumpster-specific data. Using the `filter` function, the rows with summary values were removed. The `as.integer` function was used to round sports_balls values to the nearest round number. Lastly, `mutate` was used to move the column with titles to the beginning of the data set, and to change `year` to the _double_ variable.
+
+Below, is the code chunk implementing above:
 
 ```{r}
 trash_df =
-  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx", 
+  read_excel("./data/Trash Wheel Collection Data.xlsx", 
       sheet = "Mr. Trash Wheel", 
-      range = "A2:N535") %>% 
+      range = "A2:N549") %>% 
   janitor::clean_names() %>% 
   select(-homes_powered) %>% 
   drop_na %>% 
@@ -112,23 +116,22 @@ trash_df =
   ) %>% 
   mutate(
     trash_source = "mr_trash_wheel",
-    .before = dumpster)
+    .before = dumpster) %>% 
+  mutate(
+    year = as.double(year)
+  )
 ```
 
 Of note, add the end of the code-chunk above, the `mutate` function was used to add a column at the beginning of the dataframe to distinguish source of data. We will now use a similar approach to import and clean the data from "Professor Trash Wheel". Please see the code-chunk below:
 
 ```{r}
 protrash_df = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",
+  read_excel("./data/Trash Wheel Collection Data.xlsx",
       sheet = "Professor Trash Wheel",
-      range = "A2:N117",
-      ) %>% 
+      range = "A2:M96") %>%
   janitor::clean_names() %>%
-  select(-homes_powered) %>% 
+  select(-homes_powered) %>%
   drop_na %>% 
-  mutate(
-    sports_balls = as.integer(sports_balls)
-  ) %>% 
   mutate(
     dumpster = as.integer(dumpster)
   ) %>% 
@@ -198,3 +201,5 @@ snp_df =
   mutate(month = month.name[month]) %>% 
   select(-dig_2_year, -alter, -date)
 ```
+
+
