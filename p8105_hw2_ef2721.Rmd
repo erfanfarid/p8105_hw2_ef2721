@@ -108,6 +108,9 @@ trash_df =
     sports_balls = as.integer(sports_balls)
   ) %>% 
   mutate(
+    dumpster = as.integer(dumpster)
+  ) %>% 
+  mutate(
     trash_source = "mr_trash_wheel",
     .before = dumpster)
 ```
@@ -118,15 +121,36 @@ Of note, add the end of the code-chunk above, the `mutate` function was used to 
 protrash_df = 
   read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",
       sheet = "Professor Trash Wheel",
-      range = "A2:N117")%>% 
-  janitor::clean_names() %>% 
+      range = "A2:N117",
+      ) %>% 
+  janitor::clean_names() %>%
   select(-homes_powered) %>% 
   drop_na %>% 
   mutate(
     sports_balls = as.integer(sports_balls)
   ) %>% 
   mutate(
+    dumpster = as.integer(dumpster)
+  ) %>% 
+  mutate(
     trash_source = "prof_trash_wheel",
     .before = dumpster)
 ```
+
+In each dataframes, the "dumpster" variable contained  different types. As such, both were turned into integers using `as.integer` function.
+
+Now, both data frames are ready to be added together. We will do so in the code chunk below:
+
+```{r}
+alltrash_df =
+  bind_rows(trash_df, protrash_df) %>% 
+  janitor::clean_names()
+```
+
+The result of the code chinks above is a dataframe called "alltrash_df", which was created using the `readxl` package. There are a total of **`r nrow(alltrash_df)`** observations in this dataframe, **`r nrow(trash_df)`** of which belong to the _Mr. Trash Wheel_ dataset. The average weight of the trash in _Mr. Trash Wheel_ was **`r mean(trash_df$weight_tons)` tons** and, in _Professor Trash Wheel_ was **`r mean(protrash_df$weight_tons)` tons**. The total weight of trash collected by _Professor Trash Wheel_ was **`r sum(protrash_df$weight_tons)` tons**. The total number of sports balls collected by _Mr. Trash Wheel_ in 2020 was **856 balls**.
+
+
+## Problem 3
+
+
 
