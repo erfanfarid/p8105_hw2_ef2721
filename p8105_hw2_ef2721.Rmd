@@ -156,7 +156,7 @@ The result of the code chinks above is a dataframe called "alltrash_df", which w
 ## Problem 3
 
 ### Part 1
-In the code chunk below, we imported the _pols-month_ dataset into the `pol_df` dataframe. We then cleaned it up using `janitor`, then split the dates into their year, month, and day components using `separate()` argument, splitting by _"-"_. 
+In the code chunk below, we imported the _pols-month_ dataset into the `pol_df` dataframe. We then cleaned it up using `janitor`, then split the dates into their year, month, and day components using `separate()` argument, splitting by _"-"_. To assure desired arrangement, `arrange()` was used to order dataframe based on year and month.
 
 The month number was then converted to written using `month.name` function. Afterward, the president column was created with `mutate()` utilizing the `prez_gop` and `prez_dem` columns. The `if_else` function was used to define values of the two available conditions, using `gop` and `dem` values, respectively. 
 
@@ -171,6 +171,7 @@ pol_df =
     into = c("year", "month", "day"), 
     sep = "-", 
     convert = TRUE) %>% 
+  arrange(year, month) %>% 
   mutate(month = month.name[month]) %>% 
   mutate(president = prez_gop - prez_dem) %>% 
   mutate(president = if_else(president <0, "dem", "gop")) %>% 
@@ -209,22 +210,33 @@ Third, tidy the unemployment data so that it can be merged with the previous dat
 
 In this code-chunk, the _unemployment_ database was first read by the `read.csv` function, placed into the _unemp_df_ dataframe, and was then cleaned using the `janitor` package. Subsequently, the _unemp_tidy_df_ dataframe was introduced to utilize the `pivot_longer` function, to associate the months with each year through the new `month` variable and the unemployment rates to the new `unemployment_rate` column. 
 
-Lastly, for consistency, `mutate` function was used to capitalize the first month letters, followed by the `month.name` function to to expand the 3-letter `month.abb` values.
+Lastly, for consistency, `mutate` function was used to capitalize the first month letters, followed by the `month.name` function to to expand the 3-letter `month.abb` values. In the last line, rows without values were removed using `drop_na()` function. 
 
 ```{r}
 unemp_df = 
   read.csv("./data/fivethirtyeight_datasets/unemployment.csv") %>% 
   janitor::clean_names()
 
-Unemp_tidy_df = 
+unemp_tidy_df = 
   pivot_longer(
     unemp_df, 
     jan:dec,
     names_to = "month", 
-    values_to = "unemployment_rate") %>% 
+    values_to = "unemployment_rate") %>%
     mutate(month = str_to_title(month)) %>% 
-    mutate(month = month.name[match(month, month.abb)])
+    mutate(month = month.name[match(month, month.abb)]) %>% 
+    drop_na()
 ```
 
+Next, we use the `left-join` function to merge the `snp_df` into the `pol_df` dataframes, creating results in a new `pol_snp_df` dataframe. Finally, we will merge the `unemp_tidy_df` into `pol_snp_df`, saving the results in the new dataframe `pol_snp_unemp_df`. All the merges were conducted by `year` and `month` variables.
 
+```{r}
+pol_snp_df = 
+  left_join(pol_df, snp_df, by = c("year", "month"))
 
+pol_snp_unemp_df =
+  left_join(pol_snp_df, unemp_tidy_df, by = c("year", "month") ) %>% 
+  drop_na()
+```
+
+Given the different range of years where data was collected, as a final tidy step, we will use the `drop_na` function to remove the absent datapoints.
