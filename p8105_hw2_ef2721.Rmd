@@ -152,5 +152,21 @@ The result of the code chinks above is a dataframe called "alltrash_df", which w
 
 ## Problem 3
 
+In the code chunk below, we imported the _pols-month_ dataset into the `pol_df` dataframe. We then cleaned it up using `janitor`, then split the dates into their year, month, and day components using `separate()` argument, splitting by _"-"_. The month number was then converted to written using `month.name` function. Afterward, the president column was created with `mutate()` utilizing the `prez_gop` and `prez_dem` columns. The `if_else` function was used to define values of the two available conditions, using `gop` and `dem` values, respectively. Lastly, the `prez_gop`, `prez_dem`, and `day` columns were removed using the `select()` function.
+
+```{r}
+pol_df = 
+  read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(
+    mon, 
+    into = c("year", "month", "day"), 
+    sep = "-", 
+    convert = TRUE) %>% 
+  mutate(month = month.name[month]) %>% 
+  mutate(president = prez_gop - prez_dem) %>% 
+  mutate(president = if_else(president <0, "dem", "gop")) %>% 
+  select(-prez_gop, -prez_dem, -day)
+```
 
 
