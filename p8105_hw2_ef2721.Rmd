@@ -120,6 +120,9 @@ trash_df =
   mutate(
     year = as.double(year)
   )
+
+## Created the data frame below to have a repository of the data collected in 2020
+soccer_2020_df = filter(trash_df, year == "2020") 
 ```
 
 Of note, add the end of the code-chunk above, the `mutate` function was used to add a column at the beginning of the dataframe to distinguish source of data. We will now use a similar approach to import and clean the data from "Professor Trash Wheel". Please see the code-chunk below:
@@ -150,7 +153,7 @@ alltrash_df =
   janitor::clean_names()
 ```
 
-The result of the code chinks above is a dataframe called "alltrash_df", which was created using the `readxl` package. There are a total of **`r nrow(alltrash_df)`** observations in this dataframe, **`r nrow(trash_df)`** of which belong to the _Mr. Trash Wheel_ dataset. The average weight of the trash in _Mr. Trash Wheel_ was **`r mean(trash_df$weight_tons)` tons** and, in _Professor Trash Wheel_ was **`r mean(protrash_df$weight_tons)` tons**. The total weight of trash collected by _Professor Trash Wheel_ was **`r sum(protrash_df$weight_tons)` tons**. The total number of sports balls collected by _Mr. Trash Wheel_ in 2020 was **856 balls**.
+The result of the code chinks above is a dataframe called "alltrash_df", which was created using the `readxl` package. There are a total of **`r nrow(alltrash_df)`** observations in this dataframe, **`r nrow(trash_df)`** of which belong to the _Mr. Trash Wheel_ dataset. The average weight of the trash in _Mr. Trash Wheel_ was **`r mean(trash_df$weight_tons)` tons** and, in _Professor Trash Wheel_ was **`r mean(protrash_df$weight_tons)` tons**. The total weight of trash collected by _Professor Trash Wheel_ was **`r sum(protrash_df$weight_tons)` tons**. The total number of sports balls collected by _Mr. Trash Wheel_ in 2020 was **`r sum(soccer_2020_df$sports_balls)`**.
 
 
 ## Problem 3
