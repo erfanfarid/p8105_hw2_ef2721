@@ -240,3 +240,12 @@ pol_snp_unemp_df =
 ```
 
 Given the different range of years where data was collected, as a final tidy step, we will use the `drop_na` function to remove the absent datapoints.
+
+### Discussion
+The following datasets were utilized:
+
+* `pol_df` contains information on the political party affiliations in offices of presidency, senate, congress, and governorship between years of **`r min(pol_df$year , na.rm = TRUE)`** and **`r max(pol_df$year , na.rm = TRUE)`**. It contains **`r nrow(pol_df)` rows**  and **`r ncol(pol_df)` columns**. 
+* `snp_df` contains information about the closing _S&P_ stock value at different months between years of **`r min(snp_df$year , na.rm = TRUE)`** and **`r max(snp_df$year , na.rm = TRUE)`**. It contains **`r nrow(snp_df)` rows**  and **`r ncol(snp_df)` columns**.
+* `unemp_tidy_df` contains information on _unemployment rate_ between years of **`r min(unemp_tidy_df$year , na.rm = TRUE)`** and **`r max(unemp_tidy_df$year , na.rm = TRUE)`**. It contains **`r nrow(unemp_tidy_df)` rows**  and **`r ncol(unemp_tidy_df)` columns**.
+* `pol_snp_unemp_df` is the collective database made from the three above, showcasing political party at large between years of **`r min(pol_snp_unemp_df$year , na.rm = TRUE)`** and **`r max(pol_snp_unemp_df$year , na.rm = TRUE)`**, the _S&P_ stock value at those times, as well as the _unemployment rate_ of those time periods. It contains **`r nrow(pol_snp_unemp_df)` rows**  and **`r ncol(pol_snp_unemp_df)` columns**.
+
